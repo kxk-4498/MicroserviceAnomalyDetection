@@ -1,7 +1,7 @@
 Easily deploy kubespray cluster on Cloudlab
 
 ----
-#Instructions
+# Instructions
 1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster.
     * Should boot up quickly (within a few minutes)
 2. Run: `bash setup_kubespray_prereqs.sh`
