@@ -1,4 +1,6 @@
-Step-by-step instructions to easily deploy kubespray cluster on Cloudlab. There is also support for deploying Sockshop microservice application onto the cluster and simulating user activity.
+Step-by-step instructions to easily deploy kubespray cluster on Cloudlab. 
+
+There is also support for deploying the Sockshop microservice application onto the cluster and simulating user activity.
 
 ----
 # Instructions
