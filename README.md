@@ -1,4 +1,4 @@
-Easily deploy kubespray cluster on Cloudlab
+Step-by-step instructions to easily deploy kubespray cluster on Cloudlab. There is also support for deploying Sockshop microservice application onto the cluster and simulating user activity.
 
 ----
 # Instructions
@@ -13,4 +13,4 @@ Easily deploy kubespray cluster on Cloudlab
     3. Put your Cloudlab public key in tempkey.pub (can get from https://www.cloudlab.us/ssh-keys.php’)
 4. Run: `bash deploy_kubespray.sh`
 5. Setup InfluxDB integration with Prometheus (this is one way to get the time series data)
-6. Run: `bash deploy_sockshop.sh`
+6. \[If you want to deploy sockshop\]Run: `bash deploy_sockshop.sh`
