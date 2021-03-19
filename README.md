@@ -18,6 +18,6 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
     3. Put your Cloudlab public key in tempkey.pub (can get from https://www.cloudlab.us/ssh-keys.php’)
 5. Move back to the relevant directory: `cd ~/KubesprayClusterOnCloudlab`
 6. Run: `bash deploy_kubespray.sh`. At some point you will be asked for the phasephrase for `.ssh/tempkey.pem`. This is the password to your Cloudlab profile. If the password was correct, it will output “Identity added:...". If any y/N prompts shows up, respond: `y`.
-   NOTE: IF this command succeeds, you should see a ton of ansible output.
-7. Setup InfluxDB integration with Prometheus (this is one way to get the time series data)
+   NOTE: IF this scripts runs sucessful, you should see a ton of ansible output and no errors.
+7. Setup InfluxDB integration with Prometheus (this is one way to get the time series data) -- this has not been implemented yet (and you might choose not to implement it)
 8. \[If you want to deploy sockshop\]Run: `bash deploy_sockshop.sh`
