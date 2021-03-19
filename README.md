@@ -4,7 +4,7 @@ There is also support for deploying the Sockshop microservice application onto t
 
 ----
 # Instructions
-1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster.
+1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster (if Wisconsin cluster is full, feel free to use other clusters, but I test everything on Wisconsin)
     * Should boot up quickly (within a few minutes)
 2. Clone this repo and move into the corresponding directory
     1. Run: `git clone https://github.com/fretbuzz/KubesprayClusterOnCloudlab.git`
