@@ -16,7 +16,7 @@ sudo pip install pwntools
 sudo python -m easy_install --upgrade pyOpenSSL
 
 #  Run the experimental coordinator for sockshop:
-cd ./experiment_coordinator
 kubectl label namespace sock-shop istio-injection=enabled
 kubectl apply -f  ./sockshop_modified_full_cluster.yaml
+cd ./experiment_coordinator
 sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --prepare_app --config_file ../configs_to_reproduce_results/Data_Collection/Sockshop/Scale/sockshop_four_140_exp.json --localhostip 127.0.0.1 --localport 30001 | tee sockshop_four_140.log
