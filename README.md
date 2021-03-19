@@ -14,10 +14,9 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 3. Run: `bash setup_kubespray_prereqs.sh`
 4. Manually setup passwordless-SSH:
     1. `cd ~/.ssh/`
-    2. Store your cloudlab private key in tempkey.pem: Get from https://www.cloudlab.us/ and press “Download Credentials”.
-    Move the whole file up to and including the “END RSA PRIVATE KEY” line. The corresponding password will be your Cloudlab profile
-    password. If it succeeded, it will output “Identity added:..."
+    2. Store your cloudlab private key in tempkey.pem. Do this by first creating a new file called tempkey.pem (if it doesn't already exist). Then, get your cloudlab private key by going to https://www.cloudlab.us/, pressing “Download Credentials”, and copying the whole file up to and including the “END RSA PRIVATE KEY” line into tempkey.pem. 
     3. Put your Cloudlab public key in tempkey.pub (can get from https://www.cloudlab.us/ssh-keys.php’)
-5. Run: `bash deploy_kubespray.sh`
-6. Setup InfluxDB integration with Prometheus (this is one way to get the time series data)
-7. \[If you want to deploy sockshop\]Run: `bash deploy_sockshop.sh`
+5. Move back to the relevant directory: `cd ~/KubesprayClusterOnCloudlab`
+6. Run: `bash deploy_kubespray.sh`. At some point you will be asked for the phasephrase for `.ssh/tempkey.pem`. This is the password to your Cloudlab profile. If the password was correct, it will output “Identity added:..."
+7. Setup InfluxDB integration with Prometheus (this is one way to get the time series data)
+8. \[If you want to deploy sockshop\]Run: `bash deploy_sockshop.sh`
