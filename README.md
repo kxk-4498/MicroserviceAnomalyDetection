@@ -3,8 +3,10 @@ Step-by-step instructions to easily deploy kubespray cluster on Cloudlab.
 There is also support for deploying the Sockshop microservice application onto the cluster and simulating user activity.
 
 ----
+NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks frozen, just start a new one, navigate to the correct directory, and keep following the steps. Usually the command kept running in the background.
+
 # Instructions
-1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster (if Wisconsin cluster is full, feel free to use other clusters, but I test everything on Wisconsin)
+1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster (if Wisconsin cluster is full, feel free to use other clusters)
     * Should boot up quickly (within a few minutes)
 2. Clone this repo and move into the corresponding directory
     1. Run: `git clone https://github.com/fretbuzz/KubesprayClusterOnCloudlab.git`
