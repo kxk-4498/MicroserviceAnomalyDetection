@@ -3,7 +3,7 @@ sudo chmod 600 ~/.ssh/tempkey.pem
 sudo chmod 600 ~/.ssh/tempkey.pub
 eval `ssh-agent`
 ssh-add ~/.ssh/tempkey.pem # TODO: automate using your password here
-cd ~/kubespray
+cd ./kubespray
 
 # Run the kubespray ansible playbook
 ansible-playbook -i inventory/mycluster/hosts.yml  --become --become-user=root cluster.yml
