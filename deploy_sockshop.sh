@@ -19,4 +19,4 @@ sudo python -m easy_install --upgrade pyOpenSSL
 kubectl label namespace sock-shop istio-injection=enabled
 kubectl apply -f  ./sockshop_modified_full_cluster.yaml
 cd ./experiment_coordinator
-sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --prepare_app --config_file ../sockshop_experiment.json --localhostip 127.0.0.1 --localport 30001 | tee sockshop_four_140.log
+sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --prepare_app --return_after_prepare_p --config_file ../sockshop_experiment.json --localhostip 127.0.0.1 --localport 30001 | tee sockshop_four_140.log
