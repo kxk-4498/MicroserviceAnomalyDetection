@@ -52,7 +52,7 @@ CLIENT_RATIO_CYBER = [0.0328, 0.0255, 0.0178, 0.0142, 0.0119, 0.0112, 0.0144, 0.
 
 
 def main(experiment_name, config_file, prepare_app_p, spec_port, spec_ip, localhostip, exfil_p, post_process_only,
-         use_k3s_cluster):
+         use_k3s_cluster, return_after_prepare_p):
     # step (1) read in the config file
     with open(config_file.rstrip().lstrip()) as f:
         config_params = json.load(f)
@@ -180,6 +180,10 @@ def main(experiment_name, config_file, prepare_app_p, spec_port, spec_ip, localh
         if prepare_app_p:
             prepare_app(app_name, setup_params,  spec_port, spec_ip, config_params["Deployment"], exfil_paths,
                         class_to_installer, exfil_path_class_to_image, use_k3s_cluster)
+
+            if return_after_prepare_p:
+                exit()
+
         ip,port = get_ip_and_port(app_name, use_k3s_cluster)
         print "ip,port",ip,port
 
@@ -1988,6 +1992,9 @@ if __name__=="__main__":
     parser.add_argument('--use_k3s_cluster', dest='use_k3s_cluster', action='store_true',
                         default=False,
                         help='Instead of using the minikube k8s cluster, use the k3s k8s cluster instead (in development ATM)')
+    parser.add_argument('--return_after_prepare_p', dest='return_after_prepare_p', action='store_true',
+                        default=False,
+                        help="Return right after deploying application (doesn't make sense without --prepare_app_p)")
 
     #  localhost communicates w/ vm over vboxnet0 ifconfig interface, apparently, so use the
     # address there as the response address, in this case it seems to default to the below
@@ -2052,4 +2059,4 @@ if __name__=="__main__":
         exfil_p = False
 
     main(exp_name, args.config_file, args.prepare_app_p, None, None, args.localhostip, exfil_p, args.post_process_only,
-         args.use_k3s_cluster)
+         args.use_k3s_cluster, args.return_after_prepare_p)
