@@ -2004,7 +2004,7 @@ if __name__=="__main__":
 
     args = parser.parse_args()
 
-    if args.localhostip != "192.168.99.1" and args.localport != "80":
+    if args.localhostip != "192.168.99.1": # and args.localport != "80":
         global set_ip, set_port
         set_ip = args.localhostip
         set_port = args.localport
