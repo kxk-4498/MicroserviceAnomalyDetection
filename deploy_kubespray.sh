@@ -15,7 +15,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # install istio
 curl -L https://istio.io/downloadIstio | sh - # TODO: version control this to 1.7.0
-cd istio-1.9.1 
+cd istio-1.9.2 
 export PATH=$PWD/bin:$PATH
 istioctl install --set profile=demo
 kubectl label namespace default istio-injection=enabled
