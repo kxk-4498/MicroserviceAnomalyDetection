@@ -23,5 +23,5 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 8. \[If you want to deploy sockshop\] Run: `bash deploy_sockshop.sh`. The script waits a bunch of times (to give Kubernetes cluster components time to instantiate), so don't be concerned if that happens.
 9. Prepare the application by populating the database. Move to the relevant directory via `cd ./experiment_coordinator/` and then running `sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --prepare_app --return_after_prepare_p --config_file ../sockshop_experiment.json --localhostip FRONT-END-CLUSTER-IP --localport 80 | tee sockshop_four_140.log`, where FRONT-END-CLUSTER-IP is the clusterIP of the front-end service, which can be seen by running `kubectl get svc front-end --namespace="sock-shop"` and looking at the CLUSTER-IP column
 10. Generate load (warning: this takes a long time and a lot of cpu):
-`sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --config_file ../sockshop_experiment.json --localhostip FRONT-END-CLUSTER-IP --localport 30001`
+`sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --config_file ../sockshop_experiment.json --localhostip FRONT-END-CLUSTER-IP --localport 80`
 
