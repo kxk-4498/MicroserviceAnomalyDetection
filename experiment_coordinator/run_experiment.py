@@ -602,7 +602,7 @@ def prepare_app(app_name, setup_config_params, spec_port, spec_ip, deployment_co
         print type(setup_config_params["number_background_locusts"]), type(setup_config_params["background_locust_spawn_rate"]), type(setup_config_params["number_customer_records"])
         print "ip", ip, "port", port
         request_url = "--host=http://" + ip + ":"+ str(port)
-        request_url = "-H=" + ip + ":"+ str(port)
+        request_url = "-H=http://" + ip + ":"+ str(port)
         print request_url
         prepare_cmds = ["locust", "-f", "./sockshop_setup/pop_db.py", request_url, "--no-web", "-c",
                         str(setup_config_params["number_background_locusts"]), "-r", str(setup_config_params["background_locust_spawn_rate"]),
