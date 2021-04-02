@@ -25,3 +25,5 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 10. Generate load (warning: this takes a long time and a lot of cpu):
 `sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --config_file ../sockshop_experiment.json --localhostip FRONT-END-CLUSTER-IP --localport 80`
 
+NOTE: Need to add autoscaling support to the kubespray cluster
+
