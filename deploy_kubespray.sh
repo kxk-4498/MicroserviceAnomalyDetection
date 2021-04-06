@@ -21,7 +21,6 @@ istioctl install --set profile=demo
 kubectl label namespace default istio-injection=enabled
 kubectl create namespace sock-shop
 kubectl label namespace sock-shop istio-injection=enabled # TODO: handle other applications than just sockshop
-
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/prometheus.yaml
 
 # Install InfluxDB
