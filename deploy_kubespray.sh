@@ -20,6 +20,7 @@ ansible-playbook -i inventory/mycluster/hosts.yml  --become --become-user=root c
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl create namespace sock-shop
 
 if istio
 then
@@ -29,7 +30,6 @@ then
   export PATH=$PWD/bin:$PATH
   istioctl install --set profile=demo
   kubectl label namespace default istio-injection=enabled
-  kubectl create namespace sock-shop
   kubectl label namespace sock-shop istio-injection=enabled # TODO: handle other applications than just sockshop
   kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/prometheus.yaml
 else
