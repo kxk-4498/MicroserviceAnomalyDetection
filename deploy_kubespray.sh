@@ -18,7 +18,7 @@ ansible-playbook -i inventory/mycluster/hosts.yml  --become --become-user=root c
 
 # Copy kubeconfig to the home directory
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo cp -i /etc/kubernetes/kubelet.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 if istio
