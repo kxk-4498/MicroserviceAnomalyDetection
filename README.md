@@ -8,6 +8,7 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 # Instructions
 1. Create new experiment on Cloudlab using the “small-lan” profile (3 hosts) and Wisconsin cluster (if Wisconsin cluster is full, feel free to use other clusters)
     * Should boot up quickly (within a few minutes)
+    * SSH into node1 or node2 (not node0)
 2. Clone this repo and move into the corresponding directory
     1. Run: `git clone https://github.com/fretbuzz/KubesprayClusterOnCloudlab.git`
     2. Run: `cd KubesprayClusterOnCloudlab`
