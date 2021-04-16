@@ -28,4 +28,6 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 `sudo python -u run_experiment.py --use_k3s_cluster --no_exfil --config_file ../sockshop_experiment.json --localhostip FRONT-END-CLUSTER-IP --localport 80`
 
 NOTE: Need to add autoscaling support to the kubespray cluster
+NOTE: To collect cadvisor metrics, use this command 
+`python3 influx_csv_dumper.py -db cadvisor -tl 15m`, where -tl is the Length of time for the dump
 
