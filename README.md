@@ -30,5 +30,5 @@ NOTE: SSH connections to Cloudlab time out all the time. If the terminal looks f
 NOTE: Need to add autoscaling support to the kubespray cluster
 
 NOTE: To collect cadvisor metrics, use this command 
-`python3 influx_csv_dumper.py -db cadvisor -tl 15m`, where -tl is the Length of time for the dump
+`python3 influx_csv_dumper.py -db cadvisor -tl 15m`, where -tl is the Length of time for the dump. This requires that you installed influxdb via `sudo pip3 install influxdb`.
 
