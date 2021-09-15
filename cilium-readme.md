@@ -27,13 +27,18 @@ You should see `Healthcheck: Ok` in the output.
 
 3. Next, we need to setup Hubble Relay to aggregate the flows. 
 Open a separate window in Cloudlab and run `kubectl -n kube-system port-forward service/hubble-relay --address 0.0.0.0 --address :: 4245:80`. 
-This forwards traffic from port 80 to the relay service, allowing all cilium pods to access a central relay service. 
+This forwards traffic from port 80 of the relay service to the node you are connected to on port 4245, allowing you to observer the traffic from all the cilium pods. 
 
-4. Check the health of the hubble relay: `kubectl -n kube-system exec cilium-m2ktf -- hubble status --server localhost:4245`
+4. You need to download the hubble utility from Github to access use the hubble relay service on port 4245 from the local machine. Use `curl -JLO https://github.com/cilium/hubble/releases/download/v0.8.2/hubble-linux-amd64.tar.gz` to fetch the tarball and `curl -JLO https://github.com/cilium/hubble/releases/download/v0.8.2/hubble-linux-amd64.tar.gz.sha256sum` to get the sha256sum for the tarball.
+
+5. Verify the sha256sum of the tarball and value in the sha256sum file using `sha256sum hubble-linux-amd64.tar.gz -c hubble-linux-amd64.tar.gz.sha256sum`. If verified OK, extract the tarball using `tar -xvzf hubble-linux-amd64.tar.gz`.
+
+6. Check the health of the hubble relay: `./hubble status --server localhost:4245`
 You should see `Healthcheck (via localhost:4245): Ok` in the output. 
 Whenever you want to use the relay in the future, you need to specify `--server localhost:4245` at the end of any `hubble` command.
 
-5. Collect flows! The most reliable way that I have done this is by running hubble as a monitor: `kubectl -n kube-system exec cilium-m2ktf -- hubble observe --server localhost:4245 --follow`. Pipe this output into a file to save the results.  
-You may want to specify other options, such as `-o json` when running `hubble observe`. See `hubble observe --help` for your options.
+7. Collect flows! To collect the flow from a specific cilium pod use: `kubectl -n kube-system exec cilium-m2ktf -- hubble observe --server localhost:4245 --follow`.
+If you want to collect the flow from all the cilium nodes you can leverage the hubble relay service by using `./hubble observe --server localhost:4245 --follow`.
+Pipe this output into a file to save the results. You may want to specify other options, such as `-o json` when running `hubble observe`. See `hubble observe --help` for your options.
 
-6. Run whatever workload you like, perform attacks, etc. If all is well, Hubble will capture it.
+8. Run whatever workload you like, perform attacks, etc. If all is well, Hubble will capture it.
