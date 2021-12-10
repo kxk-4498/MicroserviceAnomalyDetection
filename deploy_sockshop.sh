@@ -14,7 +14,7 @@ sudo pip install docker pexpect netifaces selenium kubernetes requests
 sudo pip install locustio==0.13.5 pycryptodome
 sudo pip install pwntools
 sudo python -m easy_install --upgrade pyOpenSSL
-
+kubectl apply -f  ./experiment_coordinator/sockshop_setup/sock-shop-ns.yaml
 #  Run the experimental coordinator for sockshop:
 kubectl label namespace sock-shop istio-injection=enabled
 kubectl apply -f  ./sockshop_modified_full_cluster.yaml

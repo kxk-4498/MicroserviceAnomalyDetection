@@ -295,6 +295,7 @@ def main(experiment_name, config_file, prepare_app_p, spec_port, spec_ip, localh
                 g.write('\nExfil: ' + str(exfil_counter) + '\n')
                 fcntl.flock(g, fcntl.LOCK_UN)
 
+
             next_exfil_start_time = next_StartEnd_time[0]
             next_exfil_end_time = next_StartEnd_time[1]
             cur_exfil_method = exfil_methods[exfil_counter]
@@ -400,7 +401,7 @@ def main(experiment_name, config_file, prepare_app_p, spec_port, spec_ip, localh
 
         #''' # enable if you are using cilium as the network plugin
         if network_plugin == 'cilium':
-            cilium_endpoint_args = ["kubectl", "-n", "kube-system", "exec", "cilium-6lffs", "--", "cilium", "endpoint", "list",
+            cilium_endpoint_args = ["kubectl", "-n", "exsystem", "exec", "cilium-6lffs", "--", "cilium", "endpoint", "list",
                                 "-o", "json"]
             out = subprocess.check_output(cilium_endpoint_args)
             container_config_file = experiment_name + '_' + '_cilium_network_configs.txt'
@@ -487,10 +488,15 @@ def start_det_exfil_path(exfil_paths, exfil_counter, cur_exfil_protocol, localho
 
     # setup config files for proxy DET instances and start them
     # note: this is only going to work for a single exp_support_scripts and a single dst, ATM
+
+    # exfil_counter is the current
     selected_containers, class_to_networks = find_exfil_path(exfil_paths, exfil_counter)
+    print("selected_containers", selected_containers)
+    print("class_to_networks", class_to_networks)
 
     proxy_instance_to_networks_to_ip = map_container_instances_to_ips(orchestrator, selected_containers,
                                                                       class_to_networks, network_plugin)
+    print("proxy_instance_to_networks_to_ip", proxy_instance_to_networks_to_ip)
 
     start_det_proxies(exfil_paths, exfil_counter, selected_containers, proxy_instance_to_networks_to_ip,
                       cur_exfil_protocol, localhostip, class_to_networks, maxsleep,
@@ -518,6 +524,9 @@ def start_det_exfil_path(exfil_paths, exfil_counter, cur_exfil_protocol, localho
 
     return selected_containers, local_det
 
+'''
+ For a given exfil path get the containers associated to it and the bridge network for an orchestrator
+'''
 def find_exfil_path(exfil_paths, exfil_counter):
     selected_container = {}
     class_to_networks = {}
@@ -584,14 +593,16 @@ def prepare_app(app_name, setup_config_params, spec_port, spec_ip, deployment_co
 
     if app_name == "sockshop":
         #sockshop_setup.scale_sockshop.main(deployment_config['deployment_scaling'], deployment_config['autoscale_p'])
-        sockshop_setup.scale_sockshop.deploy_sockshop(deployment_config['deployment_scaling'], deployment_config['autoscale_p'], use_k3s_cluster)
+        sockshop_setup.scale_sockshop.deploy_sockshop(use_k3s_cluster)
 
         # modify images appropriately
         install_exfil_dependencies(exfil_paths, orchestrator, class_to_installer, exfil_path_class_to_image)
+        if 'deployment_scaling' in deployment_config:
+            sockshop_setup.scale_sockshop.scale_sockshop(deployment_config['deployment_scaling'], deployment_config['autoscale_p'], use_k3s_cluster)
 
-        sockshop_setup.scale_sockshop.scale_sockshop(deployment_config['deployment_scaling'], deployment_config['autoscale_p'], use_k3s_cluster)
-
+        print "Sleeping for 480 seconds"
         time.sleep(480) # note: may need to increase this...
+
         if spec_port or spec_ip:
             print "spec_port", spec_port, "spec_ip", spec_ip
             ip,port=spec_port, spec_ip
@@ -1028,7 +1039,7 @@ def install_exfil_dependencies(exfil_paths, orchestrator, class_to_installer, ex
     for exfil_path in exfil_paths:
         for element in exfil_path:
             exfil_elements.add(element)
-
+    print exfil_elements
     # let's find a containers that match the element class
     for element in list(exfil_elements):
         containers,networks = get_class_instances(orchestrator, element, "None")
@@ -1056,42 +1067,46 @@ def install_exfil_dependencies(exfil_paths, orchestrator, class_to_installer, ex
         base_image_name = ":".join(base_image_name)
         new_tag_vesion = base_image_name + ':' + old_tag_version[:-1] + str(int(old_tag_version[-1]) + 1)
         new_tag_version_shorter = old_tag_version[:-1] + str(int(old_tag_version[-1]) + 1)
+
         chosen_container.commit(tag=new_tag_version_shorter, repository = base_image_name)
 
         # okay, now update kubernetese deployment
         # I'm going to use the kubernetes python client and follow the code at:
         # https://github.com/FingerLiu/client-python/blob/9ae080693cd16ce825a977cc167803ab1f7f1202/examples/deployment_examples.py#L56
         kubernetes.config.load_kube_config()
-        k8s_beta = kubernetes.client.ExtensionsV1beta1Api()
+        # k8s_beta = kubernetes.client.ExtensionsV1beta1Api()
+        k8s_apps = kubernetes.client.AppsV1Api()
         # step (1): find corresponding kubernetes deployment
-        api_response = k8s_beta.list_deployment_for_all_namespaces()
+        api_response = k8s_apps.list_deployment_for_all_namespaces()
         ## TODO: not a deploymnet... it's a replica set...
 
         cur_relevant_deployment = None
         for item in api_response.items:
-            print "item", item.metadata.labels
-            if 'name' in item.metadata.labels:
-                if element == item.metadata.labels['name']:
-                    cur_relevant_deployment = item
-                    break
-            if 'app' in item.metadata.labels:
-                if element == item.metadata.labels['app']:
-                    cur_relevant_deployment = item
-                    break
+            if item is not None and item.metadata.labels is not None:
+                print "item", item.metadata.labels
+                if 'name' in item.metadata.labels:
+                    if element == item.metadata.labels['name']:
+                        cur_relevant_deployment = item
+                        break
+                if 'app' in item.metadata.labels:
+                    if element == item.metadata.labels['app']:
+                        cur_relevant_deployment = item
+                        break
 
-        if not cur_relevant_deployment:
+        if cur_relevant_deployment is None:
             ## TODO: handle the stateful set setup of the physcial exfil...
             ## we'll do this at some point in time... but not now b/c there are more important
             ## angles to explore...
             #client2 = kubernetes.client.AppsV1beta1Api
             #api_response_stateful_set = client2.V1beta1StatefulSetList()
                 #V1beta1StatefulSet()
-            pass
+            continue
 
         # step (2): update the deployment
-        print "cur_relevant_deployment",cur_relevant_deployment.metadata.labels
+        print "cur_relevant_deployment", cur_relevant_deployment
+        print "cur_relevant_deployment labels",cur_relevant_deployment.metadata.labels
         cur_relevant_deployment.spec.template.spec.containers[0].image = new_tag_vesion
-        api_response = k8s_beta.patch_namespaced_deployment(
+        api_response = k8s_apps.patch_namespaced_deployment(
             name=element,
             namespace=cur_relevant_deployment.metadata.namespace,
             body=cur_relevant_deployment)
@@ -1335,12 +1350,13 @@ def start_det_proxy_mode(orchestrator, container, src, dst, protocol, maxsleep, 
         # going to do a bit of a workaround below, since using pipes with the subprocesses
         # module is tricky, so let's make a copy of the file we want to modify and then we
         # can just modify it in place
-        cp_command = ['cp', './exp_support_scripts/det_config_template.json', './current_det_config.json']
+        print "start_det_proxy_mode for",container.name
+        cp_command = ['cp', './exp_support_scripts/det_config_template.json', './current_det_config_'+str(container.name)+'.json']
         out = subprocess.check_output(cp_command)
-        #print "cp command result", out
+        # print "cp command result", out
 
         targetip_switch = "s/TARGETIP/\"" + dst + "\"/"
-        print src
+        print "dst", dst,"and src", src
         src_string = ""
         #for src in srcs[:-1]:
         #src_string += "\\\"" + src +  "\\\"" + ','
@@ -1352,15 +1368,15 @@ def start_det_proxy_mode(orchestrator, container, src, dst, protocol, maxsleep, 
         maxbytesread_switch = "s/MAXBYTESREAD/" + str(maxbytesread) + "/"
         minbytesread_switch = "s/MINBYTESREAD/" + str(minbytesread) + "/"
         sed_command = ["sed", "-i", "-e",  targetip_switch, "-e", proxiesip_switch, "-e", maxsleeptime_switch,
-                       "-e", maxbytesread_switch, "-e", minbytesread_switch, "./current_det_config.json"]
-        #print "sed_command", sed_command
+                       "-e", maxbytesread_switch, "-e", minbytesread_switch, "./current_det_config_"+str(container.name)+".json"]
+        print "sed_command", sed_command
         out = subprocess.check_output(sed_command)
-        #print "sed command result", out
+        print "sed command result", out
 
-        upload_config_command = ["docker", "cp", "./current_det_config.json", container.id+ ":/config.json"]
+        upload_config_command = ["docker", "cp", "./current_det_config_"+str(container.name)+".json", container.id+ ":/config.json"]
         out = subprocess.check_output(upload_config_command)
-        #print "upload_config_command", upload_config_command
-        #print "upload_config_command result", out
+        print "upload_config_command", upload_config_command
+        print "upload_config_command result", out
 
         time.sleep(1)
         start_det_command = ["python", "/DET/det.py", "-c", "/config.json", "-p", protocol, "-Z"]
@@ -1814,7 +1830,8 @@ def get_ip_and_port(app_name, use_k3s_cluster):
         print "get_ip_and_port", app_name
         out = None
         if app_name == 'sockshop':
-            out = subprocess.check_output(['minikube', 'service', 'front-end',  '--url', '--namespace=sock-shop', "--wait", "120"])
+            out = "http://192.168.49.2:30001"
+            # out = subprocess.check_output(['minikube', 'service', 'front-end',  '--url', '--namespace=sock-shop', "--wait", "120"])
         elif app_name == 'wordpress':
             # step 1: get the appropriate ip / port (like above -- need for next step)
             out = subprocess.check_output(['minikube', 'service', 'wwwppp-wordpress',  '--url', "--wait", "120"])
@@ -2048,6 +2065,7 @@ if __name__=="__main__":
         generate_analysis_json('./experimental_data/' + exp_name + '/', exp_name + '_analysis.json', config_params,
                                exp_name, args.exfil_p)
         path_to_docker_machine_tls_certs = config_params["path_to_docker_machine_tls_certs"]
+        print "path_to_docker_machine_tls_certs", path_to_docker_machine_tls_certs
 
     if not args.use_k3s_cluster:
         print "path_to_docker_machine_tls_certs", path_to_docker_machine_tls_certs

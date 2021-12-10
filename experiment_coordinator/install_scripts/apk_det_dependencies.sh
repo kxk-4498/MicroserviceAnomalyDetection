@@ -6,12 +6,13 @@ apk add python
 apk add curl
 apk add build-base
 apk add python-dev
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py -k
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py -k
 python get-pip.py
 export GIT_SSL_NO_VERIFY=1
 git clone --depth 1 https://github.com/fretbuzz/DET /DET
 git -C /DET pull
-pip2 install 'certifi==2015.4.28' --force-reinstall
+#pip2 install 'certifi==2015.4.28' --force-reinstall
+pip2 install 'certifi==2017.4.17' --force-reinstall
 pip install requests
 pip install -r /DET/requirements_mimir.txt --user
 
