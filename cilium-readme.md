@@ -5,7 +5,7 @@ This quick README was written by Clement Fung, for the 18731 Network Security cl
 ## Assumptions
 
 This guide assumes that you have already followed the main instructions in the main README, at least up to running 
-`bash deploy_sockshop.sh`. This guide also assumes that Cilium was properly instead using `bash deploy_kubespray.sh -c`. If the `-c` flag was missed, just execute the missing section of the setup. You don't need to start again from scratch.
+`bash deploy_sockshop.sh`. This guide also assumes that Cilium was properly installed using `bash deploy_kubespray.sh -c`. If the `-c` flag was missed, just execute the missing section of the setup. You don't need to start again from scratch.
 
 Run the following commands:
 1. `kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.9.5/install/kubernetes/quick-install.yaml`
