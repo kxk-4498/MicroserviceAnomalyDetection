@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 800px;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "kube-api", "label": "kube-api", "shape": "dot", "size": 10}, {"id": "queue-master", "label": "queue-master", "shape": "dot", "size": 10}, {"id": "user", "label": "user", "shape": "dot", "size": 10}, {"id": "front-end", "label": "front-end", "shape": "dot", "size": 10}, {"id": "catalogue", "label": "catalogue", "shape": "dot", "size": 10}, {"id": "orders", "label": "orders", "shape": "dot", "size": 10}, {"id": "payment", "label": "payment", "shape": "dot", "size": 10}, {"id": "shipping", "label": "shipping", "shape": "dot", "size": 10}, {"id": "carts", "label": "carts", "shape": "dot", "size": 10}, {"id": "rabbitmq", "label": "rabbitmq", "shape": "dot", "size": 10}, {"id": "user-db", "label": "user-db", "shape": "dot", "size": 10}, {"id": "orders-db", "label": "orders-db", "shape": "dot", "size": 10}, {"id": "carts-db", "label": "carts-db", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "kube-api", "to": "queue-master", "weight": 84.0}, {"arrows": "to", "from": "kube-api", "to": "user", "weight": 119.0}, {"arrows": "to", "from": "kube-api", "to": "front-end", "weight": 128.0}, {"arrows": "to", "from": "kube-api", "to": "catalogue", "weight": 95.0}, {"arrows": "to", "from": "kube-api", "to": "orders", "weight": 22.0}, {"arrows": "to", "from": "kube-api", "to": "payment", "weight": 107.0}, {"arrows": "to", "from": "kube-api", "to": "shipping", "weight": 5.0}, {"arrows": "to", "from": "kube-api", "to": "carts", "weight": 21.0}, {"arrows": "to", "from": "queue-master", "to": "kube-api", "weight": 62.0}, {"arrows": "to", "from": "queue-master", "to": "rabbitmq", "weight": 2.0}, {"arrows": "to", "from": "user", "to": "kube-api", "weight": 98.0}, {"arrows": "to", "from": "user", "to": "user-db", "weight": 19.0}, {"arrows": "to", "from": "front-end", "to": "kube-api", "weight": 93.0}, {"arrows": "to", "from": "catalogue", "to": "kube-api", "weight": 86.0}, {"arrows": "to", "from": "orders", "to": "kube-api", "weight": 22.0}, {"arrows": "to", "from": "orders", "to": "orders-db", "weight": 5.0}, {"arrows": "to", "from": "payment", "to": "kube-api", "weight": 92.0}, {"arrows": "to", "from": "shipping", "to": "kube-api", "weight": 5.0}, {"arrows": "to", "from": "carts", "to": "kube-api", "weight": 21.0}, {"arrows": "to", "from": "carts", "to": "carts-db", "weight": 6.0}, {"arrows": "to", "from": "user-db", "to": "user", "weight": 19.0}, {"arrows": "to", "from": "carts-db", "to": "carts", "weight": 6.0}, {"arrows": "to", "from": "orders-db", "to": "orders", "weight": 5.0}, {"arrows": "to", "from": "rabbitmq", "to": "queue-master", "weight": 2.0}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

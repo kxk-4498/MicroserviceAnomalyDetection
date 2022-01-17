@@ -1,0 +1,3 @@
+*.pickle
+notebooks/.ipynb_checkpoints
+results

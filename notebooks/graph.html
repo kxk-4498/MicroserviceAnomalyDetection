@@ -1,0 +1,123 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 800px;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "world", "label": "world", "shape": "dot"}, {"id": "front-end", "label": "front-end", "shape": "dot"}, {"id": "kube-dns", "label": "kube-dns", "shape": "dot"}, {"id": "user", "label": "user", "shape": "dot"}, {"id": "session-db", "label": "session-db", "shape": "dot"}, {"id": "user-db", "label": "user-db", "shape": "dot"}, {"id": "catalogue", "label": "catalogue", "shape": "dot"}, {"id": "catalogue-db", "label": "catalogue-db", "shape": "dot"}, {"id": "carts", "label": "carts", "shape": "dot"}, {"id": "carts-db", "label": "carts-db", "shape": "dot"}, {"id": "queue-master", "label": "queue-master", "shape": "dot"}, {"id": "rabbitmq", "label": "rabbitmq", "shape": "dot"}, {"id": "orders", "label": "orders", "shape": "dot"}, {"id": "orders-db", "label": "orders-db", "shape": "dot"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "world", "title": 100.0, "to": "front-end", "value": 100.0}, {"arrows": "to", "from": "front-end", "title": 120.0, "to": "kube-dns", "value": 120.0}, {"arrows": "to", "from": "front-end", "title": 80.0, "to": "user", "value": 80.0}, {"arrows": "to", "from": "front-end", "title": 2.0, "to": "session-db", "value": 2.0}, {"arrows": "to", "from": "front-end", "title": 80.0, "to": "catalogue", "value": 80.0}, {"arrows": "to", "from": "front-end", "title": 80.0, "to": "world", "value": 80.0}, {"arrows": "to", "from": "kube-dns", "title": 120.0, "to": "front-end", "value": 120.0}, {"arrows": "to", "from": "kube-dns", "title": 8.0, "to": "catalogue", "value": 8.0}, {"arrows": "to", "from": "kube-dns", "title": 1.0, "to": "carts", "value": 1.0}, {"arrows": "to", "from": "kube-dns", "title": 4.0, "to": "user", "value": 4.0}, {"arrows": "to", "from": "kube-dns", "title": 1.0, "to": "orders", "value": 1.0}, {"arrows": "to", "from": "user", "title": 60.0, "to": "front-end", "value": 60.0}, {"arrows": "to", "from": "user", "title": 19.0, "to": "user-db", "value": 19.0}, {"arrows": "to", "from": "user", "title": 4.0, "to": "kube-dns", "value": 4.0}, {"arrows": "to", "from": "session-db", "title": 2.0, "to": "front-end", "value": 2.0}, {"arrows": "to", "from": "user-db", "title": 19.0, "to": "user", "value": 19.0}, {"arrows": "to", "from": "catalogue", "title": 60.0, "to": "front-end", "value": 60.0}, {"arrows": "to", "from": "catalogue", "title": 27.0, "to": "catalogue-db", "value": 27.0}, {"arrows": "to", "from": "catalogue", "title": 8.0, "to": "kube-dns", "value": 8.0}, {"arrows": "to", "from": "catalogue-db", "title": 17.0, "to": "catalogue", "value": 17.0}, {"arrows": "to", "from": "carts", "title": 1.0, "to": "kube-dns", "value": 1.0}, {"arrows": "to", "from": "carts", "title": 6.0, "to": "carts-db", "value": 6.0}, {"arrows": "to", "from": "carts-db", "title": 5.0, "to": "carts", "value": 5.0}, {"arrows": "to", "from": "queue-master", "title": 3.0, "to": "rabbitmq", "value": 3.0}, {"arrows": "to", "from": "rabbitmq", "title": 3.0, "to": "queue-master", "value": 3.0}, {"arrows": "to", "from": "orders", "title": 1.0, "to": "kube-dns", "value": 1.0}, {"arrows": "to", "from": "orders", "title": 3.0, "to": "orders-db", "value": 3.0}, {"arrows": "to", "from": "orders-db", "title": 2.0, "to": "orders", "value": 2.0}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

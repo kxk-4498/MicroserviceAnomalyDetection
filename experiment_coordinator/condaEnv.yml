@@ -1,0 +1,16 @@
+name: sockShop
+channels:
+    - conda-forge
+dependencies:
+  - pip
+  - networkx
+  - numpy
+  - pandas
+  - requests
+  - requests
+  - locust
+  - kubernetes
+  - pip:
+    - pwntools
+    - kubernetes
+    - docker
