@@ -5,7 +5,8 @@ It is a mess and we need to cleanup the whole repository
 ## Deploying SockShop
 1. Install minikube
 2. Start minikube: `minikube start`
-3. Deploy SockShop: `kubectl apply -f ./sockshop_modified_full_cluster.yaml`
+3. Deploy SockShop: `bash deploy_sockshop.sh`
+4. Test if it is working `curl http://192.168.49.2:30001` or go to link in browser
 
 ## Simulating Traffic on SockShop
 1. cd into `experiment_coordinator`
@@ -15,9 +16,9 @@ If you need to populate the database full of users: `python pop_db.py`
 4. Simulate traffic: `simulate_traffic.py`
 
 ## Collecting Data with Cilium
-Look at `cilium-readme.md` but note it assumes we are on cloudlab (we no longer user cloudlab)
+1. `bash deploy_cilium.sh`, Brian: installs and deploys cilium, might want a better script
 
-We should redo the tutorial by looking at: https://docs.cilium.io/en/stable/gettingstarted/
+Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 
 ## Todo
 1. Cleanup Repository
