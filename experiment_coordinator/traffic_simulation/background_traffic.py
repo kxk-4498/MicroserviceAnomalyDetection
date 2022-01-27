@@ -11,8 +11,9 @@ import os
 import sockshop_api
 
 # this way we can simulate users using already-existing accounts
-with open( "users.pickle", "rb" ) as f:
-    users = pickle.loads( f.read() )
+if os.path.isfile('users.pickle'):
+    with open( "users.pickle", "rb" ) as f:
+        users = pickle.loads( f.read() )
 
 if os.path.isfile('prob_distro_sock.pickle'):
     with open('prob_distro_sock.pickle', 'r') as f:
