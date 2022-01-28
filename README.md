@@ -4,8 +4,11 @@ It is a mess and we need to cleanup the whole repository
 
 ## Deploying SockShop
 1. Install minikube
-2. Start minikube: `minikube start --cni=cilium`
-3. Deploy SockShop: `bash deploy_sockshop.sh`
+2. Set minikube config to have enough memory and cpu
+   1. `minikube config set memory 16384`
+   2. `minikube config set cpus 10`
+3. Start minikube: `minikube start --cni=cilium`
+4. Deploy SockShop: `bash deploy_sockshop.sh`
 
 Check status of pods: `kubectl get pods --namespace sock-shop`
 
