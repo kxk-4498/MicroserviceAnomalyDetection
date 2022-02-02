@@ -14,6 +14,10 @@ Check status of pods: `kubectl get pods --namespace sock-shop`
 
 Test if it is working `curl http://192.168.49.2:30001` or go to link in browser
 
+## Debugging cilium connectivity 
+1. Follow the guide for first time : https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/cilium-network-policy/
+2. Use https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/ to run tests : cilium connectivity test and cilium status --wait to verify outputs match.
+
 ## Simulating Traffic on SockShop
 1. cd into `experiment_coordinator`
 2. Setup a conda environment: `conda env create -f condaEnv.yml`
