@@ -12,6 +12,8 @@ It is a mess and we need to cleanup the whole repository
 
 Check status of pods: `kubectl get pods --namespace sock-shop`
 
+Get IP of front-end service: `minikube service --profile CLUSTER_NAME --url front-end -n sock-shop` 
+
 Test if it is working `curl http://192.168.49.2:30001` or go to link in browser
 
 ## Debugging cilium connectivity 
