@@ -2,7 +2,6 @@ import argparse
 
 from locust.env import Environment
 from pop_db import PopulateDatabase
-from background_traffic import BackgroundTraffic
 
 import time
 
@@ -15,7 +14,7 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     # TODO get this automatically or pass it in
-    host = 'http://192.168.49.2:30001'
+    host = 'http://192.168.49.2:30004'
 
     if args.populate_db:
         print('Populating DB...')
@@ -27,6 +26,7 @@ if __name__=="__main__":
         env.runner.stop()
 
     if args.sim_traffic:
+        from background_traffic import BackgroundTraffic
         print('Simulating Traffic...')
         env = Environment(user_classes=[BackgroundTraffic], host=host)
         env.create_local_runner()
