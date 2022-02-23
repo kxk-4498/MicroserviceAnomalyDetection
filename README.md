@@ -38,3 +38,14 @@ Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 1. Cleanup Repository
 2. Fix Cilium data collection
 3. Run data exfiltration attack
+
+
+##Deployment Instruction[Kirtan]
+4. Start minikube: `minikube start --network-plugin=cni -p CLUSTER_NAME`
+5. Enable cilium on minikube : `cilium install`
+6. Verify cilium is enabled : `cilium status`
+7. If you are running for the first time, verify cilium connectivity:`cilium connectivity test` : It takes couple of minutes for this to execute.
+8. Enable hubble on cilium : `cilium hubble enable`
+9. Enable port forwarding : `cilium hubble port-forward&`
+10. Check if hubble is collecting flows : `hubble status`
+11. Deploy SockShop: `bash deploy_sockshop.sh`
