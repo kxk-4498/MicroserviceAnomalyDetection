@@ -3,12 +3,12 @@ Brian: I want this repository to become the central repository for all things mi
 It is a mess and we need to cleanup the whole repository
 
 ## Deploying SockShop
-1. Install minikube
-2. Set minikube config to have enough memory and cpu
+1. Optional: Install minikube
+2. Optional: Set minikube config to have enough memory and cpu (sets default)
    1. `minikube config set memory 16384`
    2. `minikube config set cpus 10`
 3. Create a profile for your cluster: `minikube profile CLUSTER_NAME`
-4. Start minikube: `minikube start --cni=cilium -p CLUSTER_NAME`
+4. Start minikube: `minikube start --cni=cilium -p CLUSTER_NAME --memory 8192 --cpus 4`
 5. Deploy SockShop: `bash deploy_sockshop.sh`
 
 Check status of pods: `kubectl get pods --namespace sock-shop`
@@ -30,15 +30,17 @@ If you need to populate the database full of users: `python simulate_traffic.py 
 4. Simulate traffic: `python simulate_traffic.py -t`
 
 ## Collecting Data with Cilium
-1. `bash deploy_cilium.sh`, Brian: installs and deploys cilium, might want a better script
+1. To deploy cilium: `bash deploy_cilium.sh`
+2. Test if its working: `cilium connectivity test`
+3. Check if hubble is collecting flows : `hubble status`
+4. To start collecting `hubble observe -n sock-shop -o json`
 
-Documentation: https://docs.cilium.io/en/stable/gettingstarted/
+Cilium Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 
 ## Todo
 1. Cleanup Repository
 2. Fix Cilium data collection
 3. Run data exfiltration attack
-
 
 ##Deployment Instruction[Kirtan]
 4. Start minikube: `minikube start --network-plugin=cni -p CLUSTER_NAME`
