@@ -7,7 +7,7 @@ i=1
 while [ $i -le ${#data} ]
 do
    char=$(expr substr "$data" $i 2)
-   ping -c 1 -w 0 "$i.$2" &
+   ping -c 1 "$i.$2" &
    sleep "${char}"
    i=$(expr $i + 2)
 done
