@@ -1,5 +1,5 @@
 #!/bin/sh
-cp --backup=t data.txt ./hubble_data/
-rm data.txt
-hubble observe --follow  > data.txt
+cp --backup=t data.json ./hubble_data/
+rm data.json
+hubble observe --follow -o json > data.json
 
